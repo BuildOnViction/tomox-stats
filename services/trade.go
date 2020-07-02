@@ -15,9 +15,9 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/tomochain/viewdex/daos"
-	"github.com/tomochain/viewdex/types"
-	"github.com/tomochain/viewdex/utils"
+	"github.com/tomochain/tomox-stats/daos"
+	"github.com/tomochain/tomox-stats/types"
+	"github.com/tomochain/tomox-stats/utils"
 )
 
 const (

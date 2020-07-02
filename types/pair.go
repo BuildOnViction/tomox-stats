@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/tomochain/viewdex/utils/math"
+	"github.com/tomochain/tomox-stats/utils/math"
 
 	"github.com/globalsign/mgo/bson"
 	validation "github.com/go-ozzo/ozzo-validation"

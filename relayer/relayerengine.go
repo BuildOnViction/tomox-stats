@@ -12,8 +12,8 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
-	relayerAbi "github.com/tomochain/viewdex/relayer/abi"
-	"github.com/tomochain/viewdex/utils"
+	relayerAbi "github.com/tomochain/tomox-stats/relayer/abi"
+	"github.com/tomochain/tomox-stats/utils"
 )
 
 var logger = utils.Logger

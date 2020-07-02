@@ -9,7 +9,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto/sha3"
-	"github.com/tomochain/viewdex/utils/math"
+	"github.com/tomochain/tomox-stats/utils/math"
 
 	"github.com/globalsign/mgo/bson"
 )

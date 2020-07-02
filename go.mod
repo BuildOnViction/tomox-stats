@@ -1,4 +1,4 @@
-module github.com/tomochain/viewdex
+module github.com/tomochain/tomox-stats
 
 go 1.12
 

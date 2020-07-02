@@ -2,8 +2,8 @@ package crons
 
 import (
 	"github.com/robfig/cron"
-	"github.com/tomochain/viewdex/app"
-	"github.com/tomochain/viewdex/services"
+	"github.com/tomochain/tomox-stats/app"
+	"github.com/tomochain/tomox-stats/services"
 )
 
 // CronService contains the services required to initialize crons

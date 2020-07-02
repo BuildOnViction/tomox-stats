@@ -6,9 +6,9 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gorilla/mux"
-	"github.com/tomochain/viewdex/services"
-	"github.com/tomochain/viewdex/types"
-	"github.com/tomochain/viewdex/utils/httputils"
+	"github.com/tomochain/tomox-stats/services"
+	"github.com/tomochain/tomox-stats/types"
+	"github.com/tomochain/tomox-stats/utils/httputils"
 )
 
 type tradeEndpoint struct {

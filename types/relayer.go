@@ -8,7 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/globalsign/mgo/bson"
 	"github.com/go-ozzo/ozzo-validation"
-	"github.com/tomochain/viewdex/utils/math"
+	"github.com/tomochain/tomox-stats/utils/math"
 )
 
 // Relayer corresponds to a single Ethereum address. It contains a list of token balances for that address

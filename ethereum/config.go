@@ -2,7 +2,7 @@ package ethereum
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/tomochain/viewdex/utils"
+	"github.com/tomochain/tomox-stats/utils"
 )
 
 var logger = utils.Logger

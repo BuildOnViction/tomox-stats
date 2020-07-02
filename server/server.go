@@ -6,18 +6,18 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tomochain/viewdex/endpoints"
+	"github.com/tomochain/tomox-stats/endpoints"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/tomochain/viewdex/app"
-	"github.com/tomochain/viewdex/crons"
-	"github.com/tomochain/viewdex/daos"
-	"github.com/tomochain/viewdex/errors"
-	"github.com/tomochain/viewdex/relayer"
-	"github.com/tomochain/viewdex/services"
-	"github.com/tomochain/viewdex/utils"
+	"github.com/tomochain/tomox-stats/app"
+	"github.com/tomochain/tomox-stats/crons"
+	"github.com/tomochain/tomox-stats/daos"
+	"github.com/tomochain/tomox-stats/errors"
+	"github.com/tomochain/tomox-stats/relayer"
+	"github.com/tomochain/tomox-stats/services"
+	"github.com/tomochain/tomox-stats/utils"
 )
 
 const (

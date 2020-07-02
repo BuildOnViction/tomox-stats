@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/tomochain/viewdex/errors"
+	"github.com/tomochain/tomox-stats/errors"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	eth "github.com/ethereum/go-ethereum/core/types"
-	"github.com/tomochain/viewdex/contracts/contractsinterfaces"
-	"github.com/tomochain/viewdex/interfaces"
-	"github.com/tomochain/viewdex/types"
+	"github.com/tomochain/tomox-stats/contracts/contractsinterfaces"
+	"github.com/tomochain/tomox-stats/interfaces"
+	"github.com/tomochain/tomox-stats/types"
 )
 
 type Token struct {

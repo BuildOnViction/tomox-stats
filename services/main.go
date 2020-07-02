@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/tomochain/viewdex/errors"
+	"github.com/tomochain/tomox-stats/errors"
 
-	"github.com/tomochain/viewdex/utils"
+	"github.com/tomochain/tomox-stats/utils"
 )
 
 var logger = utils.Logger

@@ -5,12 +5,12 @@ import (
 	"math/big"
 	"net/http"
 
-	"github.com/tomochain/viewdex/daos"
-	"github.com/tomochain/viewdex/relayer"
+	"github.com/tomochain/tomox-stats/daos"
+	"github.com/tomochain/tomox-stats/relayer"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/tomochain/viewdex/app"
-	"github.com/tomochain/viewdex/types"
+	"github.com/tomochain/tomox-stats/app"
+	"github.com/tomochain/tomox-stats/types"
 )
 
 // RelayerService struct
