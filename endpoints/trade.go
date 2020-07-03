@@ -319,5 +319,5 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
-
+	httputils.WriteJSON(w, http.StatusBadRequest, "duration must be empty/1d/7d/30d")
 }
