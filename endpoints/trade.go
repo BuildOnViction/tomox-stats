@@ -3,6 +3,7 @@ package endpoints
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gorilla/mux"
@@ -280,6 +281,13 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 	var relayerAddress common.Address
 	v := r.URL.Query()
 	rAddress := v.Get("relayerAddress")
+	duration := v.Get("duration")
+
+	type NumberTrader struct {
+		ActiveUser int    `json:"activeUser"`
+		Duration   string `json:"duration"`
+	}
+	var res NumberTrader
 	if rAddress != "" {
 		if !common.IsHexAddress(rAddress) {
 			httputils.WriteError(w, http.StatusBadRequest, "Invalid relayer address")
@@ -287,7 +295,29 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 		}
 		relayerAddress = common.HexToAddress(rAddress)
 	}
+	if duration == "" {
+		res.Duration = "all"
+		res.ActiveUser = e.tradeService.GetNumberUsers(relayerAddress)
+		httputils.WriteJSON(w, http.StatusOK, res)
+		return
+	}
+	if duration == "1d" {
+		res.Duration = duration
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -1).Unix(), 0)
+		httputils.WriteJSON(w, http.StatusOK, res)
+		return
+	}
+	if duration == "7d" {
+		res.Duration = duration
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -7).Unix(), 0)
+		httputils.WriteJSON(w, http.StatusOK, res)
+		return
+	}
+	if duration == "30d" {
+		res.Duration = duration
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -30).Unix(), 0)
+		httputils.WriteJSON(w, http.StatusOK, res)
+		return
+	}
 
-	res := e.tradeService.GetNumberUser(relayerAddress)
-	httputils.WriteJSON(w, http.StatusOK, res)
 }

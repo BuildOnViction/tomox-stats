@@ -887,8 +887,8 @@ func (s *TradeService) GetTopRelayerUserPnL(relayerAddress common.Address, baseT
 	return users[0:top]
 }
 
-// GetNumberUser get total trader
-func (s *TradeService) GetNumberUser(relayerAddress common.Address) int {
+// GetNumberUsers get total trader
+func (s *TradeService) GetNumberUsers(relayerAddress common.Address) int {
 	users := make(map[common.Address]bool)
 	for relayer, tradebyRelayer := range s.tradeCache.relayerUserTrades {
 		if (relayerAddress == common.Address{} || relayer.Hex() == relayerAddress.Hex()) {
@@ -897,6 +897,23 @@ func (s *TradeService) GetNumberUser(relayerAddress common.Address) int {
 					users[address] = true
 				}
 
+			}
+		}
+	}
+	return len(users)
+}
+
+// GetNumberTraderByTime get number trader bytime
+func (s *TradeService) GetNumberTraderByTime(relayerAddress common.Address, dateFrom, dateTo int64) int {
+	users := make(map[common.Address]bool)
+	if tradenypair, ok := s.tradeCache.relayerUserTrades[relayerAddress]; ok {
+		for _, tradeuserbyaddress := range tradenypair {
+			for address, tradebytime := range tradeuserbyaddress {
+				for t := range tradebytime {
+					if (t >= dateFrom || dateFrom == 0) && (t <= dateTo || dateTo == 0) {
+						users[address] = true
+					}
+				}
 			}
 		}
 	}
