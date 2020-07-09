@@ -75,9 +75,13 @@ func NewRouter() *mux.Router {
 	tokenDao := daos.NewTokenDao()
 	pairDao := daos.NewPairDao()
 	tradeDao := daos.NewTradeDao()
+	lendingTradeDao := daos.NewLendingTradeDao()
 	relayerDao := daos.NewRelayerDao()
 	tradeService := services.NewTradeService(tokenDao, tradeDao)
 	tradeService.Init()
+
+	lendingTradeService := services.NewLendingTradeService(lendingTradeDao)
+	lendingTradeService.Init()
 
 	exchangeAddress := common.HexToAddress(app.Config.Tomochain["exchange_address"])
 	contractAddress := common.HexToAddress(app.Config.Tomochain["exchange_contract_address"])
@@ -90,6 +94,7 @@ func NewRouter() *mux.Router {
 	cronService := crons.NewCronService(relayerService)
 	// initialize MongoDB Change Streams
 	go tradeService.WatchChanges()
+	go lendingTradeService.WatchChanges()
 
 	cronService.InitCrons()
 	return r
