@@ -68,10 +68,41 @@ var e2 = []string{
 }
 
 var bot = []string{
-	"0x2a941348945811697d669802d7abaaa4fc544af2",
-	"0x881e1caae2f97601701c762d73f1c83fd186cf0c",
-	"0x92875d7345d8447eb9cba401caa4959343772336",
-	"0xd081777a391b9bbb15b0ae1e4103fd18689bdb3c",
+	"0x9E7c130D6EA105450dD8DdD51dd6fAB4b5c955d7",
+	"0xF8ec1939AF7F37F53156d554fe8187E2Cdf4A060",
+	"0x0F8469Ead31Ffd4b6b504dba35B0Cf3C8DFf4e14",
+	"0x569874387d94F9efF87Bbe1e94f2308681F64223",
+	"0x01F294DBdD3207fE86Af1b68a697dA4d1296B75B",
+
+	"0x0cd9d70a38b71ed056e5d20fef6e3c9d2f6bc253",
+	"0xc923f5f834b45674bac07c85f0328fa713de3fe2",
+	"0xf742536b95b2e3bcfc48543ae93d4ebf93f3c537",
+	"0xf742536b95b2e3bcfc48543ae93d4ebf93f3c537",
+	"0xf996ae46adad51f2bb0c0879670cbae466202e4d",
+
+	"0x988cE4471422Af884Ef42c7d6dd6B6986F1Eaf80",
+	"0xA13948aD209FD8967da18B7c2E4841133f725F01",
+	"0xa9E590c7B76be6f473a308669B9373199219581C",
+	"0xa2191f5aeA9aCAF5875E5b42A6DbA378C5f0fbed",
+	"0xC65Ac99fC0c96330504B733EB01e9d58dAD93FA6",
+
+	"0x90CA4896779C8BC4cAf9085Cfc73F54B17Bc0e09",
+	"0x02e45aDF6025553d6df357415FF624d375Abf2B8",
+	"0x42224E7404D0c037B6D7aB7027A74b22f3190302",
+	"0x0BDbC4E0e19CE1C8129612CcD1EB4eBa94FE064B",
+	"0xF8032b6ef6843cE4938EB742742F4cB5C91236A0",
+
+	"0x548bA11486a2bC522Ab864773a5fC6Ffd9777A1f",
+	"0xb10010Bf1C3AA108170e1C3fE2662B8a462E6040",
+	"0x859695a2C648014a31d307e73CF688e009317F9E",
+	"0x717f876aD79773AB3290A2bcf9244B1C8F9602e1",
+	"0x628Cd98302aBD2Cf30a8e54539410D726Bb0e5F6",
+
+	"0xc683608c1125717F0C459442d5830DDCd321704C",
+	"0x95A47f00F14AEbE3C893F6978957af036Aae4627",
+	"0xe92a0B625E8Be02AD88918B67d752274737Db09b",
+	"0x0bF9BDEE7d4f572033187D001dEc079331D833Ed",
+	"0xa46fbe3Bf444ffFb8BDAd3F682bda5cBec7F0ebC",
 }
 
 // TradeService struct with daos required, responsible for communicating with daos.
@@ -713,7 +744,7 @@ func (s *TradeService) GetTopRelayerUserTradeVoumeByPair(relayerAddress common.A
 	return users[0:top]
 }
 
-// QueryTrade get total infomation
+// QueryTotal get total infomation
 func (s *TradeService) QueryTotal(relayerAddress common.Address, baseTokens []common.Address, quoteToken common.Address, from, to int64) *types.TradeVolume {
 	totalVolume := big.NewInt(0)
 	traderCount := big.NewInt(0)
@@ -909,6 +940,9 @@ func (s *TradeService) GetNumberTraderByTime(relayerAddress common.Address, date
 	if tradenypair, ok := s.tradeCache.relayerUserTrades[relayerAddress]; ok {
 		for _, tradeuserbyaddress := range tradenypair {
 			for address, tradebytime := range tradeuserbyaddress {
+				if s.isBotAddress(address) {
+					continue
+				}
 				for t := range tradebytime {
 					if (t >= dateFrom || dateFrom == 0) && (t <= dateTo || dateTo == 0) {
 						users[address] = true
