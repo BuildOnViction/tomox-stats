@@ -117,7 +117,7 @@ func (s *LendingTradeService) Init() {
 	now := time.Now().Unix()
 	s.loadCache()
 	if s.lendingTradeCache.lastTime == 0 {
-		s.lendingTradeCache.lastTime = time.Now().Unix() - aday
+		s.lendingTradeCache.lastTime = time.Now().Unix() - intervalCrawl
 	}
 	s.fetch(s.lendingTradeCache.lastTime, now)
 	s.commitCache()

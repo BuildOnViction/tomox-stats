@@ -26,7 +26,7 @@ const (
 	sideBuy          = "BUY"
 	sideSell         = "SELL"
 	cacheTimeLifeMax = 15 * 50
-	aday             = 1 * 24 * 60 * 60
+	intervalCrawl    = 60 * 24 * 60 * 60
 )
 
 var e1 = []string{
@@ -211,7 +211,7 @@ func (s *TradeService) Init() {
 	now := time.Now().Unix()
 	s.loadCache()
 	if s.tradeCache.lastTime == 0 {
-		s.tradeCache.lastTime = time.Now().Unix() - aday
+		s.tradeCache.lastTime = time.Now().Unix() - intervalCrawl
 	}
 	s.fetch(s.tradeCache.lastTime, now)
 	s.commitCache()
