@@ -18,6 +18,10 @@ import (
 	"github.com/tomochain/tomox-stats/utils"
 )
 
+const (
+	lendingCacheFile = "lending.trade.cache"
+)
+
 // LendingTradeService struct with daos required, responsible for communicating with daos.
 // LendingTradeService functions are responsible for interacting with daos and implements business logics.
 type LendingTradeService struct {
@@ -133,8 +137,6 @@ func (s *LendingTradeService) Init() {
 			}
 		}
 	}()
-
-	logger.Info("OHLCV finished")
 }
 
 func (s *LendingTradeService) fetch(fromdate int64, todate int64) {
@@ -172,7 +174,6 @@ func (s *LendingTradeService) flattenRelayerUserTrades() []*types.LendingUserTra
 func (s *LendingTradeService) commitCache() error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	logger.Info("commit trade cache")
 	relayerUserTrades := s.flattenRelayerUserTrades()
 	cachefile := &cachelendingtradefile{
 		LastTime:          s.lendingTradeCache.lastTime,
@@ -182,7 +183,7 @@ func (s *LendingTradeService) commitCache() error {
 	if err != nil {
 		return err
 	}
-	file, err := os.Create("trade.cache")
+	file, err := os.Create(lendingCacheFile)
 	defer file.Close()
 	if err == nil {
 		_, err = file.Write(cacheData)
@@ -194,7 +195,7 @@ func (s *LendingTradeService) commitCache() error {
 }
 
 func (s *LendingTradeService) loadCache() error {
-	file, err := os.Open("trade.cache")
+	file, err := os.Open(lendingCacheFile)
 	defer file.Close()
 	if err != nil {
 		return err
@@ -312,8 +313,7 @@ func (s *LendingTradeService) updateRelayerUserTrade(trade *types.LendingTrade) 
 		} else {
 			last.Count = new(big.Int).Add(last.Count, big.NewInt(1))
 		}
-		
-		
+
 		if last, ok := s.lendingTradeCache.relayerUserTrades[trade.BorrowingRelayer][trade.Borrower][modTime]; !ok {
 			userTrade := &types.LendingUserTrade{
 				UserAddress:    trade.Borrower,

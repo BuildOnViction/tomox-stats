@@ -26,7 +26,7 @@ const (
 	sideBuy          = "BUY"
 	sideSell         = "SELL"
 	cacheTimeLifeMax = 15 * 50
-	aday             = 60 * 24 * 60 * 60
+	aday             = 1 * 24 * 60 * 60
 )
 
 var e1 = []string{

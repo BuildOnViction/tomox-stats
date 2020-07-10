@@ -89,6 +89,9 @@ func NewRouter() *mux.Router {
 	relayerEngine := relayer.NewRelayer(app.Config.Tomochain["http_url"], exchangeAddress, contractAddress, lendingContractAddress)
 	relayerService := services.NewRelayerService(relayerEngine, tokenDao, pairDao, relayerDao)
 	endpoints.ServeTradeResource(r, tradeService)
+
+	endpoints.ServeLendingTradeResource(r, lendingTradeService)
+	
 	// deploy http and ws endpoints
 
 	cronService := crons.NewCronService(relayerService)

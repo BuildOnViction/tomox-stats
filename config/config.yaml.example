@@ -1,5 +1,6 @@
 db_name: tomodex
 env: dev
+run_fullnode: false
 error_file: config/errors.yaml
 log_level: DEBUG
 tomochain:
