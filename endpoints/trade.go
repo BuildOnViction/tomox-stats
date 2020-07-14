@@ -302,7 +302,7 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 	}
 	if duration == "" {
 		res.Duration = "all"
-		res.ActiveUser = e.tradeService.GetNumberUsers(relayerAddress)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, 0, 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
