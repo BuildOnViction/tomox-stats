@@ -282,12 +282,17 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 	v := r.URL.Query()
 	rAddress := v.Get("relayerAddress")
 	duration := v.Get("duration")
-
+	bot := v.Get("excludeBot")
 	type NumberTrader struct {
 		ActiveUser int    `json:"activeUser"`
 		Duration   string `json:"duration"`
 	}
 	var res NumberTrader
+	excludeBot := false
+
+	if bot == "true" {
+		excludeBot = true
+	}
 	if rAddress != "" {
 		if !common.IsHexAddress(rAddress) {
 			httputils.WriteError(w, http.StatusBadRequest, "Invalid relayer address")
@@ -303,19 +308,19 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 	}
 	if duration == "1d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -1).Unix(), 0)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -1).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
 	if duration == "7d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -7).Unix(), 0)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -7).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
 	if duration == "30d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -30).Unix(), 0)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -30).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
