@@ -935,23 +935,27 @@ func (s *TradeService) GetNumberUsers(relayerAddress common.Address) int {
 }
 
 // GetNumberTraderByTime get number trader bytime
-func (s *TradeService) GetNumberTraderByTime(relayerAddress common.Address, dateFrom, dateTo int64, excludeBot bool) int {
+func (s *TradeService) GetNumberTraderByTime(relayerAddress common.Address, baseToken common.Address, quoteToken common.Address, dateFrom, dateTo int64, excludeBot bool) int {
 	users := make(map[common.Address]bool)
 	if tradenypair, ok := s.tradeCache.relayerUserTrades[relayerAddress]; ok {
-		for _, tradeuserbyaddress := range tradenypair {
-			for address, tradebytime := range tradeuserbyaddress {
-				if excludeBot {
-					if s.isBotAddress(address) {
-						continue
+		for pair, tradeuserbyaddress := range tradenypair {
+			bToken, qToken, _ := s.parsePairString(pair)
+			if ((baseToken == common.Address{}) || baseToken.Hex() == bToken.Hex()) && ((quoteToken == common.Address{}) || quoteToken.Hex() == qToken.Hex()) {
+				for address, tradebytime := range tradeuserbyaddress {
+					if excludeBot {
+						if s.isBotAddress(address) {
+							continue
+						}
 					}
-				}
 
-				for t := range tradebytime {
-					if (t >= dateFrom || dateFrom == 0) && (t <= dateTo || dateTo == 0) {
-						users[address] = true
+					for t := range tradebytime {
+						if (t >= dateFrom || dateFrom == 0) && (t <= dateTo || dateTo == 0) {
+							users[address] = true
+						}
 					}
 				}
 			}
+
 		}
 	}
 	return len(users)

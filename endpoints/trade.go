@@ -279,10 +279,14 @@ func (e *tradeEndpoint) handleQueryTotal(w http.ResponseWriter, r *http.Request)
 func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Request) {
 
 	var relayerAddress common.Address
+	var baseToken common.Address
+	var quoteToken common.Address
 	v := r.URL.Query()
 	rAddress := v.Get("relayerAddress")
 	duration := v.Get("duration")
 	bot := v.Get("excludeBot")
+	bToken := v.Get("baseToken")
+	qToken := v.Get("quoteToken")
 	type NumberTrader struct {
 		ActiveUser int    `json:"activeUser"`
 		Duration   string `json:"duration"`
@@ -300,27 +304,41 @@ func (e *tradeEndpoint) handleGetNumberUser(w http.ResponseWriter, r *http.Reque
 		}
 		relayerAddress = common.HexToAddress(rAddress)
 	}
+	if bToken != "" {
+		if !common.IsHexAddress(bToken) {
+			httputils.WriteError(w, http.StatusBadRequest, "Invalid baseToken address")
+			return
+		}
+		baseToken = common.HexToAddress(bToken)
+	}
+	if qToken != "" {
+		if !common.IsHexAddress(qToken) {
+			httputils.WriteError(w, http.StatusBadRequest, "Invalid quoteToken address")
+			return
+		}
+		quoteToken = common.HexToAddress(qToken)
+	}
 	if duration == "" {
 		res.Duration = "all"
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, 0, 0, excludeBot)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, baseToken, quoteToken, 0, 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
 	if duration == "1d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -1).Unix(), 0, excludeBot)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, baseToken, quoteToken, time.Now().AddDate(0, 0, -1).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
 	if duration == "7d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -7).Unix(), 0, excludeBot)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, baseToken, quoteToken, time.Now().AddDate(0, 0, -7).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
 	if duration == "30d" {
 		res.Duration = duration
-		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, time.Now().AddDate(0, 0, -30).Unix(), 0, excludeBot)
+		res.ActiveUser = e.tradeService.GetNumberTraderByTime(relayerAddress, baseToken, quoteToken, time.Now().AddDate(0, 0, -30).Unix(), 0, excludeBot)
 		httputils.WriteJSON(w, http.StatusOK, res)
 		return
 	}
