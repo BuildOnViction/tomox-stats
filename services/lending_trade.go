@@ -55,16 +55,14 @@ func NewLendingTradeService(lendingTradeDao *daos.LendingTradeDao) *LendingTrade
 // WatchChanges watch lending trade notify
 func (s *LendingTradeService) WatchChanges() {
 	ct, sc, err := s.lendingTradeDao.Watch()
+
+	defer sc.Close()
 	if err != nil {
 		logger.Error("Failed to open change stream")
 		return
 	}
 
 	defer ct.Close()
-	defer sc.Close()
-
-	// Watch the event again in case there is error and function returned
-	defer s.WatchChanges()
 
 	ctx := context.Background()
 
@@ -72,27 +70,13 @@ func (s *LendingTradeService) WatchChanges() {
 	for {
 		select {
 		case <-ctx.Done(): // if parent context was cancelled
-			err := ct.Close() // close the stream
-			if err != nil {
-				logger.Error("Change stream closed")
-			}
+			logger.Info("LendingWatch Done")
 			return //exiting from the func
 		default:
 			ev := types.LendingTradeChangeEvent{}
 
 			//getting next item from the steam
 			ok := ct.Next(&ev)
-
-			//if data from the stream wasn't un-marshaled, we get ok == false as a result
-			//so we need to call Err() method to get info why
-			//it'll be nil if we just have no data
-			if !ok {
-				err := ct.Err()
-				if err != nil {
-					logger.Error(err)
-					return
-				}
-			}
 
 			//if item from the stream un-marshaled successfully, do something with it
 			if ok {

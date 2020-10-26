@@ -20,6 +20,8 @@ import (
 	"github.com/tomochain/tomox-stats/utils"
 )
 
+import pp "net/http/pprof"
+
 const (
 	swaggerUIDir = "/swaggerui/"
 )
@@ -63,6 +65,13 @@ func Start() {
 	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
 	allowedMethods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
+	router.HandleFunc("/debug/pprof/", pp.Index)
+	router.HandleFunc("/debug/pprof/cmdline", pp.Cmdline)
+	router.HandleFunc("/debug/pprof/profile", pp.Profile)
+	router.HandleFunc("/debug/pprof/symbol", pp.Symbol)
+	router.HandleFunc("/debug/pprof/trace", pp.Trace)
+	router.HandleFunc("/debug/pprof/goroutine", pp.Index)
+
 	panic(http.ListenAndServe(address, handlers.CORS(allowedHeaders, allowedOrigins, allowedMethods)(router)))
 }
 
@@ -91,7 +100,7 @@ func NewRouter() *mux.Router {
 	endpoints.ServeTradeResource(r, tradeService)
 
 	endpoints.ServeLendingTradeResource(r, lendingTradeService)
-	
+
 	// deploy http and ws endpoints
 
 	cronService := crons.NewCronService(relayerService)

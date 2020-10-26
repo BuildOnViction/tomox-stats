@@ -176,45 +176,26 @@ func (s *TradeService) WatchChanges() {
 
 	ct, sc, err := s.tradeDao.Watch()
 
+	defer sc.Close()
 	if err != nil {
 		logger.Error("Failed to open change stream")
 		return
 	}
-
 	defer ct.Close()
-	defer sc.Close()
-
-	// Watch the event again in case there is error and function returned
-	defer s.WatchChanges()
-
 	ctx := context.Background()
 
 	//Handling change stream in a cycle
 	for {
 		select {
 		case <-ctx.Done(): // if parent context was cancelled
-			err := ct.Close() // close the stream
-			if err != nil {
-				logger.Error("Change stream closed")
-			}
-			return //exiting from the func
+			logger.Info("TradeWatch Done")
+			return
 		default:
+			logger.Info("Getting next item from the steam")
 			ev := types.TradeChangeEvent{}
 
 			//getting next item from the steam
 			ok := ct.Next(&ev)
-
-			//if data from the stream wasn't un-marshaled, we get ok == false as a result
-			//so we need to call Err() method to get info why
-			//it'll be nil if we just have no data
-			if !ok {
-				err := ct.Err()
-				if err != nil {
-					logger.Error(err)
-					return
-				}
-			}
-
 			//if item from the stream un-marshaled successfully, do something with it
 			if ok {
 				logger.Debugf("Operation Type: %s", ev.OperationType)
@@ -239,13 +220,13 @@ func (s *TradeService) NotifyTrade(trade *types.Trade) error {
 // ensure add current time frame before trade notify come
 func (s *TradeService) Init() {
 	logger.Info("OHLCV init starting...")
-	now := time.Now().Unix()
+	//now := time.Now().Unix()
 	s.loadCache()
 	if s.tradeCache.lastTime == 0 {
 		s.tradeCache.lastTime = time.Now().Unix() - intervalCrawl
 	}
-	s.fetch(s.tradeCache.lastTime, now)
-	s.commitCache()
+	//s.fetch(s.tradeCache.lastTime, now)
+	//s.commitCache()
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
 	go func() {
