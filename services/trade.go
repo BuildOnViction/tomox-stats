@@ -207,6 +207,10 @@ func (s *TradeService) WatchChanges() {
 
 // NotifyTrade handle trade insert/update db trigger
 func (s *TradeService) NotifyTrade(trade *types.Trade) error {
+	if trade == nil {
+		logger.Info("Trade Nil")
+		return nil
+	}
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	key := s.getPairString(trade.BaseToken, trade.QuoteToken)
